@@ -14,6 +14,7 @@ function createCookie (string $userId) {
     $expires = time() + (60 * 60 * 24);
 
     // expiration date must be saved
+    // temp table until we make one up
     // need to declare this for my ide
     /** @var \PDO $pdo */
     $message = $pdo->prepare("INSERT INTO sessions (user_id, token, expires) VALUES (?, ?, ?)");

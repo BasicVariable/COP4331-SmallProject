@@ -62,6 +62,7 @@ try{
     if (!checkPassword($password)){
         http_response_code(401);
         echo json_encode(["error" => "Invalid password."]);
+        exit;
     }
     //
 
@@ -72,8 +73,7 @@ try{
     $message = $pdo->prepare("INSERT INTO users (first_name, last_name, email, username, password_hash) VALUES (?, ?, ?, ?, ?,)");
     $message->execute([$firstName, $lastName, $email, $username, $hash]);
 
-    // no clue how to get, search later
-    $userId = $message->fetch();
+    $userId = $pdo->lastInsertId();
 
     require('./components/cookies.php');
     components\cookies\createCookie($userId);
