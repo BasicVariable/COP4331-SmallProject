@@ -21,6 +21,7 @@ function createCookie (\PDO $pdo, string $userId) {
     //
 
     if ($message->rowCount() <= 0) {
+        http_response_code(500);
         echo json_encode(["error" => "No user was found with id" . $userId]);
         exit;
     }
@@ -29,7 +30,22 @@ function createCookie (\PDO $pdo, string $userId) {
 }
 
 function deleteCookie (\PDO $pdo, string $token) {
+    if (empty($_token)) {
+        http_response_code(401);
+        echo json_encode(["error" => "Authentication cookie not provided"]);
+        exit;
+    }
 
+    $message = $pdo->prepare("UPDATE users SET token = ? WHERE token = ?");
+    $message->execute(["", $token]);
+
+    if ($message->rowCount() <= 0) {
+        http_response_code(500);
+        echo json_encode(["error" => "No user was found with id" . $token]);
+        exit;
+    }
+
+    setcookie('authentication', "", time() - 1000, "/", "", false, true);
 }
 
 // https://www.php.net/manual/en/pdostatement.fetch.php
