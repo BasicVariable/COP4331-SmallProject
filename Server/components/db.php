@@ -1,16 +1,12 @@
 <?php
-$host = "0.0.0.0";
-$port = "3306";
-$dbName = "test";
-$user = "root";
-$password = "root";
+$env = parse_ini_file("../../.env");
 $charset = "utf8";
 
-$dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=$charset";
+$dsn = "mysql:host={$env['HOST']};port={$env['PORT']};dbname={$env['DB_NAME']};charset=$charset";
 $options = []; // edit later, no clue
 
 try{
-    $pdo = new PDO($dsn, $user, $password);
+    $pdo = new PDO($dsn, $env["USER"], $env["PASSWORD"], $options);
 } catch (PDOException $e){
     http_response_code(500);
     echo json_encode([
