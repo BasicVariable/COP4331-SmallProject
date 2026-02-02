@@ -6,7 +6,7 @@ namespace components\cookies;
 // I completely forgot about how php scopes work. Just because db is called globally in file doesn't mean the function call has access (they have their own local scope).
 // functions have their own local scope.
 // https://www.php.net/manual/en/function.setcookie.php
-function createCookie (\PDO $pdo, string $userId) {
+function createCookie (\PDO $pdo, string $userId): void {
     $token = bin2hex(
         random_bytes(32)
     );

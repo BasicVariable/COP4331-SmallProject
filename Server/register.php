@@ -26,12 +26,6 @@ header('Content-Type: application/json');
 
 require './components/db.php';
 
-if (!isset($username, $pass)){
-    http_response_code(500);
-    echo json_encode(["error" => "Username and password are required."]);
-    exit;
-}
-
 function checkUsername(string $username):bool {
     if (strlen($username) < 3) return false;
 
@@ -51,6 +45,12 @@ try{
     $firstName = $input["firstName"];
     $lastName = $input["lastName"];
     $password = $input["password"];
+
+    if (!isset($username, $pass)){
+        http_response_code(500);
+        echo json_encode(["error" => "Username and password are required."]);
+        exit;
+    }
 
     // in case anyone sends a request themselves
     if (!checkUsername($username)){
@@ -76,7 +76,7 @@ try{
     $userId = $pdo->lastInsertId();
 
     require('./components/cookies.php');
-    components\cookies\createCookie($userId);
+    components\cookies\createCookie($pdo, $userId);
     exit;
 }catch (\PDOException $e){
     $errorCode = $e->getCode();
